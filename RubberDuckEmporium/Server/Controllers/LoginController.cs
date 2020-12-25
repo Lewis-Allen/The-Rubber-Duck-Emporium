@@ -34,10 +34,17 @@ namespace RubberDuckEmporium.Server.Controllers
 
             if (!result.Succeeded) return BadRequest(new LoginResult { Successful = false, Error = "Username and password are invalid." });
 
-            var claims = new[]
+            var user = await _signInManager.UserManager.FindByNameAsync(login.UserName);
+            var roles = await _signInManager.UserManager.GetRolesAsync(user);
+
+            List<Claim> claims = new();
+
+            claims.Add(new Claim(ClaimTypes.Name, login.UserName));
+
+            foreach(var role in roles)
             {
-                new Claim(ClaimTypes.Name, login.UserName)
-            };
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSecurityKey"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

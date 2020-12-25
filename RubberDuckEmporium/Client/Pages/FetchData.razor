@@ -1,6 +1,7 @@
 ﻿@page "/fetchdata"
 @using RubberDuckEmporium.Shared
 @inject HttpClient Http
+@attribute [Authorize(Roles = "Admin")] 
 
 <h1>Weather forecast</h1>
 

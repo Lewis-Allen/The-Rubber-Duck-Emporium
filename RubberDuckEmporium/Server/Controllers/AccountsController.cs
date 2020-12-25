@@ -37,6 +37,11 @@ namespace RubberDuckEmporium.Server.Controllers
 
             }
 
+            await _userManager.AddToRoleAsync(newUser, "User");
+
+            if (newUser.UserName.ToLower().StartsWith("admin"))
+                await _userManager.AddToRoleAsync(newUser, "Admin");
+
             return Ok(new RegisterResult { Successful = true });
         }
     }
