@@ -1,8 +1,21 @@
 ﻿@page "/"
+@inject IProductService productService; 
 
-<h1>Hello, world!</h1>
+<h1>Products</h1>
 
-<p>Welcome to your new app.</p>
+@if(products == null)
+{
+    <p>Loading Products...</p>
+}
+else
+{
+    <ul>
+        @foreach (var product in products)
+        {
+            <li>@(product.Name + " - " + product.Price)</li>
+        }
+    </ul>
+}
 
 <AuthorizeView>
     <Authorized>
@@ -24,3 +37,13 @@
         <li>Admin</li>
     </AuthorizeView>
 </ul>
+
+@code {        
+
+    ProductModel[] products;
+    protected async override Task OnInitializedAsync()
+    {
+        var a = await productService.GetAllProducts();
+        products = a;
+    }
+}

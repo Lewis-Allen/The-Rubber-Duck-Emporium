@@ -72,7 +72,6 @@ namespace RubberDuckEmporium.Server
             {
                 app.UseExceptionHandler("/Error");
             }
-
             app.UseBlazorFrameworkFiles();
             app.UseStaticFiles();
 
@@ -88,17 +87,9 @@ namespace RubberDuckEmporium.Server
                 endpoints.MapFallbackToFile("index.html");
             });
 
-            var scope = app.ApplicationServices.CreateScope();
+            using var scope = app.ApplicationServices.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            AddStaticData(context);
-        }
-
-        private static void AddStaticData(IdentityDbContext context)
-        {
-            context.Roles.Add(new IdentityRole { Name = "User", NormalizedName = "USER", Id = Guid.NewGuid().ToString(), ConcurrencyStamp = Guid.NewGuid().ToString() });
-            context.Roles.Add(new IdentityRole { Name = "Admin", NormalizedName = "ADMIN", Id = Guid.NewGuid().ToString(), ConcurrencyStamp = Guid.NewGuid().ToString() });
-
-            context.SaveChanges();
+            DbInitializer.Initialize(context);
         }
     }
 }

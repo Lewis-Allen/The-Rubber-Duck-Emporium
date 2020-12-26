@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using RubberDuckEmporium.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,7 @@ namespace RubberDuckEmporium.Server.Data
         {
 
         }
+
+        public DbSet<ProductModel> Products { get; set; }
     }
 }
