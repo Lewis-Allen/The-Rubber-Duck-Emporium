@@ -33,6 +33,7 @@ namespace RubberDuckEmporium.Server.Controllers
 
             var basket = _context.Baskets
                 .Include(b => b.BasketItems)
+                .ThenInclude(bi => bi.Product)
                 .FirstOrDefault(b => b.UserID == currentUser.Id);
 
             if(basket is null)
@@ -50,28 +51,25 @@ namespace RubberDuckEmporium.Server.Controllers
 
         [HttpPost]
         [Route("")]
-        public async Task<BasketModel> AddProduct(ProductModel product, int quantity)
+        public async Task<BasketModel> AddProduct([FromBody]BasketItemModel basketItem)
         {
             var basket = await Get();
 
-            var existing = basket.BasketItems?.Find(p => p.Product?.ProductID == product.ProductID);
+            var existing = basket.BasketItems?.Find(p => p.Product?.ProductID == basketItem.Product.ProductID);
 
             if(existing is null)
             {
                 BasketItemModel newItem = new();
 
-                var productItem = _context.Products.Find(product.ProductID);
+                var productItem = _context.Products.Find(basketItem.Product.ProductID);
                 newItem.Product = productItem;
-                newItem.Quantity = quantity;
-
-                if (basket.BasketItems is null)
-                    basket.BasketItems = new();
+                newItem.Quantity = basketItem.Quantity;
 
                 basket.BasketItems.Add(newItem);
             }
             else
             {
-                existing.Quantity += quantity;
+                existing.Quantity += basketItem.Quantity;
             }
             _context.Baskets.Update(basket);
             await _context.SaveChangesAsync();

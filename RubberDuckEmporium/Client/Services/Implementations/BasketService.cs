@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace RubberDuckEmporium.Client.Services.Implementations
@@ -19,11 +20,13 @@ namespace RubberDuckEmporium.Client.Services.Implementations
             _httpClient = httpClient;
         }
 
-        public async Task<BasketModel> AddToBasket(ProductModel product, int quantity)
+        public async Task<BasketModel> AddToBasket(BasketItemModel basketItem)
         {
-            var res = await _httpClient.PostAsJsonAsync("/api/basket", new { product, quantity });
+            var data = JsonSerializer.Serialize(basketItem);
+            var res = await _httpClient.PostAsJsonAsync("/api/basket", basketItem);
+
             var basket = await res.Content.ReadFromJsonAsync<BasketModel>();
-            return null;
+            return basket;
         }
 
         public void RemoveFromBasket(ProductModel product, int quantity)

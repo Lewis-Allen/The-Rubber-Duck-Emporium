@@ -1,7 +1,19 @@
 ﻿@page "/basket" 
 @inject IBasketService BasketService
 
-<p>@CurrentBasket?.BasketID</p>
+@if(CurrentBasket is null)
+{
+    <p>Loading Basket...</p>
+}
+else
+{
+<ul>
+    @foreach(var basketItem in CurrentBasket.BasketItems)
+    {
+        <li>@basketItem.Product?.Name - @basketItem.Quantity</li>
+    }
+</ul>
+}
 
 @code {
 
@@ -9,8 +21,6 @@
 
     protected async override Task OnInitializedAsync()
     {
-        var a = await BasketService.GetBasket();
-        
-        //CurrentBasket = await BasketService.GetBasket();
+        CurrentBasket = await BasketService.GetBasket();
     }
 } 

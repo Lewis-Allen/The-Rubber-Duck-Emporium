@@ -10,9 +10,8 @@ namespace RubberDuckEmporium.Shared
     {
         public BasketItemModel() { }
 
-        public BasketItemModel(BasketModel basket, ProductModel product, int quantity)
+        public BasketItemModel(ProductModel product, int quantity)
         {
-            Basket = basket;
             Product = product;
             Quantity = quantity;
         }
@@ -20,7 +19,5 @@ namespace RubberDuckEmporium.Shared
         public int BasketItemID { get; set; }
         public ProductModel Product { get; set; }
         public int Quantity { get; set; }
-
-        public BasketModel Basket { get; set; }
     }
 }

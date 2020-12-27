@@ -51,7 +51,8 @@ else
 
     void AddToBasket(ProductModel product)
     {
-        basketService.AddToBasket(product, 1);
+        BasketItemModel basketItem = new(product, 1);
+        basketService.AddToBasket(basketItem);
         StateHasChanged();
     }
 }

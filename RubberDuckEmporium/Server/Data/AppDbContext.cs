@@ -53,8 +53,7 @@ namespace RubberDuckEmporium.Server.Data
                 .IsRequired();
 
             builder.Entity<BasketModel>()
-                .HasMany(b => b.BasketItems)
-                .WithOne(bi => bi.Basket);
+                .HasMany(b => b.BasketItems);
 
             builder.Entity<OrderModel>()
                 .HasMany(o => o.OrderItems)
