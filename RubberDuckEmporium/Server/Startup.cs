@@ -30,8 +30,8 @@ namespace RubberDuckEmporium.Server
             services.AddDbContext<AppDbContext>(options =>
                 options.UseInMemoryDatabase("Memory"));
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddRoles<IdentityRole>()
+            services.AddIdentity<IdentityUser<Guid>, IdentityRole<Guid>>()
+                .AddRoles<IdentityRole<Guid>>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -61,7 +61,10 @@ namespace RubberDuckEmporium.Server
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, 
+            IWebHostEnvironment env, 
+            UserManager<IdentityUser<Guid>> userManager, 
+            RoleManager<IdentityRole<Guid>> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -89,7 +92,7 @@ namespace RubberDuckEmporium.Server
 
             using var scope = app.ApplicationServices.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            DbInitializer.Initialize(context);
+            DbInitializer.Initialize(context, userManager, roleManager);
         }
     }
 }

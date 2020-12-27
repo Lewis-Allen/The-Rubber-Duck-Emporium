@@ -9,22 +9,26 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Net.Http.Json;
+using RubberDuckEmporium.Client.Services.Interfaces;
 
-namespace RubberDuckEmporium.Client.Services
+namespace RubberDuckEmporium.Client.Services.Implementations
 {
     public class AuthService : IAuthService
     {
         private readonly HttpClient _httpClient;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
         private readonly ILocalStorageService _localStorage;
+        private readonly IBasketService _basketService;
 
         public AuthService(HttpClient httpClient,
                            AuthenticationStateProvider authenticationStateProvider,
-                           ILocalStorageService localStorage)
+                           ILocalStorageService localStorage,
+                           IBasketService basketService)
         {
             _httpClient = httpClient;
             _authenticationStateProvider = authenticationStateProvider;
             _localStorage = localStorage;
+            _basketService = basketService;
         }
 
         public async Task<RegisterResult> Register(RegisterModel registerModel)

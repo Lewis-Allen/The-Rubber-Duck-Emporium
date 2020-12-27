@@ -1,4 +1,5 @@
-﻿using RubberDuckEmporium.Shared;
+﻿using RubberDuckEmporium.Client.Services.Interfaces;
+using RubberDuckEmporium.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +8,11 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RubberDuckEmporium.Client.Services
+namespace RubberDuckEmporium.Client.Services.Implementations
 {
     public class ProductService : IProductService
     {
+
         private readonly HttpClient _httpClient;
 
         public ProductService(HttpClient httpClient)

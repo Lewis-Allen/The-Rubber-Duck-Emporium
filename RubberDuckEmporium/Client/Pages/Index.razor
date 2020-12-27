@@ -1,5 +1,6 @@
 ﻿@page "/"
 @inject IProductService productService; 
+@inject IBasketService basketService; 
 
 <h1>Products</h1>
 
@@ -12,7 +13,8 @@ else
     <ul>
         @foreach (var product in products)
         {
-            <li>@(product.Name + " - " + product.Price)</li>
+            ProductModel productLink = product;
+            <li><button @onclick="() => AddToBasket(productLink)">@(product.Name + " - " + product.Price)</button></li>
         }
     </ul>
 }
@@ -45,5 +47,11 @@ else
     {
         var a = await productService.GetAllProducts();
         products = a;
+    }
+
+    void AddToBasket(ProductModel product)
+    {
+        basketService.AddToBasket(product, 1);
+        StateHasChanged();
     }
 }

@@ -13,11 +13,9 @@ namespace RubberDuckEmporium.Server.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
-        private static UserModel LoggedOutUser = new UserModel { IsAuthenticated = false };
+        private readonly UserManager<IdentityUser<Guid>> _userManager;
 
-        private readonly UserManager<IdentityUser> _userManager;
-
-        public AccountsController(UserManager<IdentityUser> userManager)
+        public AccountsController(UserManager<IdentityUser<Guid>> userManager)
         {
             _userManager = userManager;
         }
@@ -25,7 +23,7 @@ namespace RubberDuckEmporium.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] RegisterModel model)
         {
-            var newUser = new IdentityUser { UserName = model.UserName };
+            var newUser = new IdentityUser<Guid> { UserName = model.UserName };
 
             var result = await _userManager.CreateAsync(newUser, model.Password);
 
@@ -34,13 +32,9 @@ namespace RubberDuckEmporium.Server.Controllers
                 var errors = result.Errors.Select(x => x.Description);
 
                 return Ok(new RegisterResult { Successful = false, Errors = errors });
-
             }
 
             await _userManager.AddToRoleAsync(newUser, "User");
-
-            if (newUser.UserName.ToLower().StartsWith("admin"))
-                await _userManager.AddToRoleAsync(newUser, "Admin");
 
             return Ok(new RegisterResult { Successful = true });
         }

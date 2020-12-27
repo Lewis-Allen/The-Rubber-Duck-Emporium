@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace RubberDuckEmporium.Shared
 {
-    public class ProductModel
+    public class OrderItemModel
     {
         public int ProductID { get; set; }
-        public string Name { get; set; }
-        public int Price { get; set; }
-        public string ImageURL { get; set; }
+        public ProductModel Product { get; set; }
+        public int Quantity { get; set; }
+
+        public int OrderID { get; set; }
+        public OrderModel Order { get; set; }
     }
 }

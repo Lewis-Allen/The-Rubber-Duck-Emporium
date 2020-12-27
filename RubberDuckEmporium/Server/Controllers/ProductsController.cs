@@ -21,6 +21,7 @@ namespace RubberDuckEmporium.Server.Controllers
         }
 
         [HttpGet]
+        [Route("")]
         public IEnumerable<ProductModel> GetAll()
         {
             return _context.Products.ToArray();

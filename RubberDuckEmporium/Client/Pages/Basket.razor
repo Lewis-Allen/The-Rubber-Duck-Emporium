@@ -1,0 +1,16 @@
+﻿@page "/basket" 
+@inject IBasketService BasketService
+
+<p>@CurrentBasket?.BasketID</p>
+
+@code {
+
+    public BasketModel CurrentBasket { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        var a = await BasketService.GetBasket();
+        
+        //CurrentBasket = await BasketService.GetBasket();
+    }
+} 

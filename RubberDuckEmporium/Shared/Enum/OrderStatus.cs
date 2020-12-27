@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace RubberDuckEmporium.Shared
 {
-    public class UserModel
+    public enum OrderStatus
     {
-        public string UserName { get; set; }
-        public bool IsAuthenticated { get; set; }
+        ORDERPLACED,
+        DISPATCHED,
+        DELIVERED
     }
 }

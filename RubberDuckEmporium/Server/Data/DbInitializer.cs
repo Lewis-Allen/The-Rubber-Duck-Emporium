@@ -10,7 +10,7 @@ namespace RubberDuckEmporium.Server.Data
 {
     public static class DbInitializer
     {
-        public static void Initialize(AppDbContext context)
+        public static void Initialize(AppDbContext context, UserManager<IdentityUser<Guid>> userManager, RoleManager<IdentityRole<Guid>> roleManager)
         {
             context.Database.EnsureCreated();
 
@@ -19,20 +19,35 @@ namespace RubberDuckEmporium.Server.Data
                 return;
             }
 
-            context.Roles.Add(new IdentityRole { Name = "User", NormalizedName = "USER", Id = Guid.NewGuid().ToString(), ConcurrencyStamp = Guid.NewGuid().ToString() });
-            context.Roles.Add(new IdentityRole { Name = "Admin", NormalizedName = "ADMIN", Id = Guid.NewGuid().ToString(), ConcurrencyStamp = Guid.NewGuid().ToString() });
+            Guid adminGuid = Guid.NewGuid();
+            Guid defaultGuid = Guid.NewGuid();
 
-            context.Products.Add(new ProductModel { ID = 1, Name = "Batman Rubber Duck", Price = 600 }); 
-            context.Products.Add(new ProductModel { ID = 2, Name = "Superman Rubber Duck", Price = 600 }); 
-            context.Products.Add(new ProductModel { ID = 3, Name = "Spiderman Rubber Duck", Price = 600 });
-            context.Products.Add(new ProductModel { ID = 4, Name = "Captain Marvel Rubber Duck", Price = 600 });
-            context.Products.Add(new ProductModel { ID = 5, Name = "Thanos Rubber Duck", Price = 600 });
-            context.Products.Add(new ProductModel { ID = 6, Name = "Captain America Rubber Duck", Price = 600 });
-            context.Products.Add(new ProductModel { ID = 7, Name = "Hulk Rubber Duck", Price = 600 });
-            context.Products.Add(new ProductModel { ID = 8, Name = "Avengers Rubber Duck Set", Price = 2000 });
-            context.Products.Add(new ProductModel { ID = 9, Name = "Justice League Rubber Duck Set", Price = 2000 });
+            var adminUser = new IdentityUser<Guid> { Id = adminGuid, UserName = "Admin" };
+            var defaultUser = new IdentityUser<Guid> { Id = defaultGuid, UserName = "Default" };
+
+            context.Products.Add(new ProductModel { ProductID = 1, Name = "Batman Rubber Duck", Price = 600 }); 
+            context.Products.Add(new ProductModel { ProductID = 2, Name = "Superman Rubber Duck", Price = 600 }); 
+            context.Products.Add(new ProductModel { ProductID = 3, Name = "Spiderman Rubber Duck", Price = 600 });
+            context.Products.Add(new ProductModel { ProductID = 4, Name = "Captain Marvel Rubber Duck", Price = 600 });
+            context.Products.Add(new ProductModel { ProductID = 5, Name = "Thanos Rubber Duck", Price = 600 });
+            context.Products.Add(new ProductModel { ProductID = 6, Name = "Captain America Rubber Duck", Price = 600 });
+            context.Products.Add(new ProductModel { ProductID = 7, Name = "Hulk Rubber Duck", Price = 600 });
+            context.Products.Add(new ProductModel { ProductID = 8, Name = "Avengers Rubber Duck Set", Price = 2000 });
+            context.Products.Add(new ProductModel { ProductID = 9, Name = "Justice League Rubber Duck Set", Price = 2000 });
 
             context.SaveChanges();
+
+            var userRole = new IdentityRole<Guid> { Name = "User", NormalizedName = "USER", Id = Guid.NewGuid(), ConcurrencyStamp = Guid.NewGuid().ToString() };
+            var adminRole = new IdentityRole<Guid> { Name = "Admin", NormalizedName = "ADMIN", Id = Guid.NewGuid(), ConcurrencyStamp = Guid.NewGuid().ToString() };
+
+            roleManager.CreateAsync(userRole).GetAwaiter().GetResult();
+            roleManager.CreateAsync(adminRole).GetAwaiter().GetResult();
+
+            userManager.CreateAsync(adminUser, "P@ssword1#").GetAwaiter().GetResult();
+            userManager.CreateAsync(defaultUser, "P@ssword1#").GetAwaiter().GetResult();
+
+            userManager.AddToRoleAsync(defaultUser, "User").GetAwaiter().GetResult();
+            userManager.AddToRolesAsync(adminUser, new string[] { "User", "Admin" }).GetAwaiter().GetResult();
         }
     }
 }

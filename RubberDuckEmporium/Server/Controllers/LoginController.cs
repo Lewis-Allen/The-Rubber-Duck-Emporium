@@ -18,10 +18,10 @@ namespace RubberDuckEmporium.Server.Controllers
     public class LoginController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<IdentityUser<Guid>> _signInManager;
 
         public LoginController(IConfiguration configuration,
-                               SignInManager<IdentityUser> signInManager)
+                               SignInManager<IdentityUser<Guid>> signInManager)
         {
             _configuration = configuration;
             _signInManager = signInManager;
@@ -41,7 +41,7 @@ namespace RubberDuckEmporium.Server.Controllers
 
             claims.Add(new Claim(ClaimTypes.Name, login.UserName));
 
-            foreach(var role in roles)
+            foreach (var role in roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
