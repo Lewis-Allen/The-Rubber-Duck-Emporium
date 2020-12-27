@@ -11,6 +11,7 @@ namespace RubberDuckEmporium.Client.Services.Interfaces
     {
         public Task<BasketModel> GetBasket();
         public Task<BasketModel> AddToBasket(BasketItemModel basketItem);
+        public Task<BasketModel> UpdateBasketItem(BasketItemModel basketItem);
         public Task<BasketModel> ClearBasket();
     }
 }

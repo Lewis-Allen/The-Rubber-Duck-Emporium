@@ -22,21 +22,26 @@ namespace RubberDuckEmporium.Client.Services.Implementations
 
         public async Task<BasketModel> AddToBasket(BasketItemModel basketItem)
         {
-            var data = JsonSerializer.Serialize(basketItem);
             var res = await _httpClient.PostAsJsonAsync("/api/basket", basketItem);
 
             var basket = await res.Content.ReadFromJsonAsync<BasketModel>();
             return basket;
         }
 
-        public void RemoveFromBasket(ProductModel product, int quantity)
+        public async Task<BasketModel> UpdateBasketItem(BasketItemModel basketItem)
         {
-            throw new NotImplementedException();
+            var res = await _httpClient.PutAsJsonAsync("/api/basket", basketItem);
+
+            var basket = await res.Content.ReadFromJsonAsync<BasketModel>();
+            return basket;
         }
 
-        public Task<BasketModel> ClearBasket()
+        public async Task<BasketModel> ClearBasket()
         {
-            throw new NotImplementedException();
+            var res = await _httpClient.DeleteAsync("/api/basket");
+
+            var basket = await res.Content.ReadFromJsonAsync<BasketModel>();
+            return basket;
         }
 
         public Task<BasketModel> GetBasket()

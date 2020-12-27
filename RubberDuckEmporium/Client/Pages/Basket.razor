@@ -1,18 +1,20 @@
-﻿@page "/basket" 
+﻿@page "/basket"
 @inject IBasketService BasketService
 
-@if(CurrentBasket is null)
+@if (CurrentBasket is null)
 {
     <p>Loading Basket...</p>
 }
 else
 {
-<ul>
-    @foreach(var basketItem in CurrentBasket.BasketItems)
-    {
-        <li>@basketItem.Product?.Name - @basketItem.Quantity</li>
-    }
-</ul>
+    <button class="btn btn-secondary" @onclick="ClearBasket">Clear Basket</button>
+    <ul>
+        @foreach (var basketItem in CurrentBasket.BasketItems)
+        {
+            var item = basketItem;
+            <li>@item.Product.Name - @item.Quantity <button class="btn btn-danger" @onclick="() => UpdateItem(item.Product, 0)">Delete</button></li>
+        }
+    </ul>
 }
 
 @code {
@@ -22,5 +24,16 @@ else
     protected async override Task OnInitializedAsync()
     {
         CurrentBasket = await BasketService.GetBasket();
+    }
+
+    protected async Task UpdateItem(ProductModel product, int quantity)
+    {
+        BasketItemModel basketItem = new(product, quantity);
+        CurrentBasket = await BasketService.UpdateBasketItem(basketItem);
+    }
+
+    protected async Task ClearBasket()
+    {
+        CurrentBasket = await BasketService.ClearBasket();
     }
 } 

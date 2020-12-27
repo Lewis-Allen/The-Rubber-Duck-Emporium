@@ -79,13 +79,19 @@ namespace RubberDuckEmporium.Server.Controllers
 
         [HttpPut]
         [Route("")]
-        public async Task<BasketModel> UpdateProduct(ProductModel product, int quantity)
+        public async Task<BasketModel> UpdateProduct([FromBody]BasketItemModel basketItem)
         {
             var basket = await Get();
 
-            var existing = basket.BasketItems.Find(p => p.Product.ProductID == product.ProductID);
-
-            existing.Quantity = quantity;
+            if(basketItem.Quantity == 0)
+            {
+                basket.BasketItems.RemoveAll(bi => bi.Product.ProductID == basketItem.Product.ProductID);
+            }
+            else
+            {
+                var existing = basket.BasketItems.Find(p => p.Product.ProductID == basketItem.Product.ProductID);
+                existing.Quantity = basketItem.Quantity;
+            }
 
             _context.Baskets.Update(basket);
             await _context.SaveChangesAsync();
@@ -99,18 +105,8 @@ namespace RubberDuckEmporium.Server.Controllers
         {
             var basket = await Get();
 
-            if(basket == null)
-            {
-                var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
-                basket = new();
-                basket.UserID = user.Id;
-                _context.Baskets.Add(basket);
-            }
-            else
-            {
-                basket.BasketItems = new();
-                _context.Baskets.Update(basket);
-            }
+            basket.BasketItems = new();
+            _context.Baskets.Update(basket);
 
             await _context.SaveChangesAsync();
 
