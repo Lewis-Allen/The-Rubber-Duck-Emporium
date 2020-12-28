@@ -21,7 +21,7 @@ namespace RubberDuckEmporium.Server.Data
         public DbSet<OrderModel> Orders { get; set; }
         public DbSet<OrderItemModel> OrderItems { get; set; }
         public DbSet<BasketModel> Baskets { get; set; }
-        public DbSet<BasketItemModel> BasketITems { get; set; }
+        public DbSet<BasketItemModel> BasketItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -31,11 +31,22 @@ namespace RubberDuckEmporium.Server.Data
             builder.Entity<ProductModel>()
                 .HasKey(p => p.ProductID);
 
+            builder.Entity<ProductModel>()
+                .Property(p => p.ProductID);
+
             builder.Entity<OrderModel>()
                 .HasKey(o => o.OrderID);
 
+            builder.Entity<OrderModel>()
+                .Property(o => o.OrderID)
+                .ValueGeneratedOnAdd();
+
             builder.Entity<OrderItemModel>()
-                .HasKey(oi => new { oi.OrderID, oi.ProductID });
+                .HasKey(oi => oi.OrderItemID);
+
+            builder.Entity<OrderItemModel>()
+                .Property(oi => oi.OrderItemID)
+                .ValueGeneratedOnAdd();
 
             builder.Entity<BasketModel>()
                 .HasKey(b => b.BasketID);
@@ -47,6 +58,10 @@ namespace RubberDuckEmporium.Server.Data
             builder.Entity<BasketItemModel>()
                 .HasKey(bi => bi.BasketItemID);
 
+            builder.Entity<BasketItemModel>()
+                .Property(bi => bi.BasketItemID)
+                .ValueGeneratedOnAdd();
+
             // Other Properties ----------
             builder.Entity<ProductModel>()
                 .Property(p => p.Name)
@@ -56,8 +71,7 @@ namespace RubberDuckEmporium.Server.Data
                 .HasMany(b => b.BasketItems);
 
             builder.Entity<OrderModel>()
-                .HasMany(o => o.OrderItems)
-                .WithOne(oi => oi.Order);
+                .HasMany(o => o.OrderItems);
         }
     }
 }

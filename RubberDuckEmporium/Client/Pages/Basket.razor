@@ -1,9 +1,16 @@
 ﻿@page "/basket"
 @inject IBasketService BasketService
+@inject IOrderService OrderService 
+@inject NavigationManager NavigationManager
+@attribute [Authorize]
 
 @if (CurrentBasket is null)
 {
     <p>Loading Basket...</p>
+}
+else if(CurrentBasket.BasketItems.Count == 0)
+{
+    <p>Your basket is currently empty!</p>
 }
 else
 {
@@ -12,20 +19,21 @@ else
         @foreach (var basketItem in CurrentBasket.BasketItems.OrderBy(bi => bi.Product.Name))
         {
             var item = basketItem;
-        <li>
-            @item.Product.Name - @item.Quantity
-            <button class="btn btn-sm btn-outline-warning" @onclick="() => UpdateItem(item.Product, item.Quantity - 1)">
-                <span class="oi oi-arrow-thick-bottom" title="Remove one" aria-hidden="true"></span>
-            </button>
-            <button class="btn btn-sm btn-outline-success" @onclick="() => UpdateItem(item.Product, item.Quantity + 1)">
-                <span class="oi oi-arrow-thick-top" title="Add one" aria-hidden="true"></span>
-            </button>
-            <button class="btn btn-sm btn-danger" @onclick="() => UpdateItem(item.Product, 0)">
-                <span class="oi oi-x" title="Remove from basket" aria-hidden="true"></span>
-            </button>
-        </li>
+            <li>
+                @item.Product.Name - @item.Quantity
+                <button class="btn btn-sm btn-outline-warning" @onclick="() => UpdateItem(item.Product, item.Quantity - 1)">
+                    <span class="oi oi-arrow-thick-bottom" title="Remove one" aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-sm btn-outline-success" @onclick="() => UpdateItem(item.Product, item.Quantity + 1)">
+                    <span class="oi oi-arrow-thick-top" title="Add one" aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-sm btn-danger" @onclick="() => UpdateItem(item.Product, 0)">
+                    <span class="oi oi-x" title="Remove from basket" aria-hidden="true"></span>
+                </button>
+            </li>
         }
     </ul>
+    <button class="btn btn-primary" @onclick="PlaceOrder">Place Order</button>
 }
 
 @code {
@@ -46,5 +54,13 @@ else
     protected async Task ClearBasket()
     {
         CurrentBasket = await BasketService.ClearBasket();
+    }
+
+    protected async Task PlaceOrder()
+    {
+        var placedOrder = await OrderService.PlaceOrder(CurrentBasket);
+        CurrentBasket = await BasketService.GetBasket();
+
+        NavigationManager.NavigateTo($"/orders/{placedOrder.OrderID}");
     }
 } 

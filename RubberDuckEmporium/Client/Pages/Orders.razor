@@ -1,0 +1,42 @@
+﻿@page "/orders"
+@inject IOrderService OrderService 
+@attribute [Authorize]
+
+<h1>Orders</h1>
+
+@if(CurrentOrders is null)
+{
+    <p>Loading Orders...</p>
+}
+else if (CurrentOrders.Count == 0)
+{
+    <p>You have not placed any orders yet.</p>
+}
+else
+{
+    <ul>
+    @foreach(var order in CurrentOrders)
+    {
+        <li>
+            Order ID: @order.OrderID
+            <ul>
+                @foreach(var orderItem in order.OrderItems.OrderBy(oi => oi.Product.Name))
+                {
+                    <li>@orderItem.Product.Name - @orderItem.Quantity</li>
+                }
+            </ul>
+        </li>
+        
+    }
+    </ul>
+}
+
+@code {        
+
+    public List<OrderModel> CurrentOrders { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        CurrentOrders = await OrderService.RetrieveAllForUser();
+    }
+} 

@@ -1,0 +1,36 @@
+﻿@page "/orders/{OrderID:int}"
+@inject IOrderService OrderService;
+
+<h1>Order Details - @(CurrentOrder is null ? "" : CurrentOrder.OrderID)</h1>
+
+@if (CurrentOrder is null)
+{
+    <p>Loading Order...</p>
+}
+else
+{
+    <ul>
+        @foreach (var orderItem in CurrentOrder.OrderItems.OrderBy(oi => oi.Product.Name))
+        {
+            <li>@orderItem.Product.Name - @orderItem.Quantity</li>
+        }
+    </ul>
+}
+
+<NavLink class="nav-link" href="orders">
+    <button class="btn btn-primary">
+        Go Back
+    </button>
+</NavLink>
+
+@code {
+    [Parameter]
+    public int OrderID { get; set; }
+
+    public OrderModel CurrentOrder { get; set; }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        CurrentOrder = await OrderService.Retrieve(OrderID);
+    }
+}

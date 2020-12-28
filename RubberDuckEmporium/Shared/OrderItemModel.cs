@@ -8,11 +8,16 @@ namespace RubberDuckEmporium.Shared
 {
     public class OrderItemModel
     {
-        public int ProductID { get; set; }
+        public OrderItemModel() { }
+
+        public OrderItemModel(ProductModel product, int quantity)
+        {
+            Product = product;
+            Quantity = quantity;
+        }
+
+        public int OrderItemID { get; set; }
         public ProductModel Product { get; set; }
         public int Quantity { get; set; }
-
-        public int OrderID { get; set; }
-        public OrderModel Order { get; set; }
     }
 }
