@@ -14,6 +14,7 @@ namespace RubberDuckEmporium.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes="Bearer")]
     public class BasketController : ControllerBase
     {
         private readonly AppDbContext _context;

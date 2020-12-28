@@ -9,10 +9,21 @@ else
 {
     <button class="btn btn-secondary" @onclick="ClearBasket">Clear Basket</button>
     <ul>
-        @foreach (var basketItem in CurrentBasket.BasketItems)
+        @foreach (var basketItem in CurrentBasket.BasketItems.OrderBy(bi => bi.Product.Name))
         {
             var item = basketItem;
-            <li>@item.Product.Name - @item.Quantity <button class="btn btn-danger" @onclick="() => UpdateItem(item.Product, 0)">Delete</button></li>
+        <li>
+            @item.Product.Name - @item.Quantity
+            <button class="btn btn-sm btn-outline-warning" @onclick="() => UpdateItem(item.Product, item.Quantity - 1)">
+                <span class="oi oi-arrow-thick-bottom" title="Remove one" aria-hidden="true"></span>
+            </button>
+            <button class="btn btn-sm btn-outline-success" @onclick="() => UpdateItem(item.Product, item.Quantity + 1)">
+                <span class="oi oi-arrow-thick-top" title="Add one" aria-hidden="true"></span>
+            </button>
+            <button class="btn btn-sm btn-danger" @onclick="() => UpdateItem(item.Product, 0)">
+                <span class="oi oi-x" title="Remove from basket" aria-hidden="true"></span>
+            </button>
+        </li>
         }
     </ul>
 }
