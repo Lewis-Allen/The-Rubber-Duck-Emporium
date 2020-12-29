@@ -20,11 +20,11 @@ namespace RubberDuckEmporium.Shared
             
             OrderStatus status = secondsSinceOrder switch
             {
-                > 120 => OrderStatus.DELIVERED,
-                > 90 => OrderStatus.OUTFORDELIVERY,
-                > 60 => OrderStatus.DISPATCHED,
-                > 30 => OrderStatus.PREPARINGFORDISPATCH,
-                _ => OrderStatus.ORDERPLACED,
+                > 120 => OrderStatus.Delivered,
+                > 90 => OrderStatus.OutForDelivery,
+                > 60 => OrderStatus.Dispatched,
+                > 30 => OrderStatus.PreparingForDispatch,
+                _ => OrderStatus.OrderPlaced,
             };
 
             return status;

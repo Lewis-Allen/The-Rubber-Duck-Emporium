@@ -8,10 +8,10 @@ namespace RubberDuckEmporium.Shared.Enum
 {
     public enum OrderStatus
     {
-        ORDERPLACED,
-        PREPARINGFORDISPATCH,
-        DISPATCHED,
-        OUTFORDELIVERY,
-        DELIVERED
+        OrderPlaced,
+        PreparingForDispatch,
+        Dispatched,
+        OutForDelivery,
+        Delivered
     }
 }

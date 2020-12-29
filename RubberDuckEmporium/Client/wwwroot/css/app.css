@@ -8,6 +8,12 @@ a, .btn-link {
     color: #0366d6;
 }
 
+.navbar {
+    border-width: 0;
+    border-style: none;
+    border-radius: 0;
+}
+
 .btn-primary {
     color: #fff;
     background-color: #1b6ec2;

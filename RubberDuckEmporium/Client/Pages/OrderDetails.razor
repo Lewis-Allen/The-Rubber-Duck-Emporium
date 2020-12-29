@@ -3,7 +3,7 @@
 @implements IDisposable
 @attribute [Authorize]
 
-<h1>Order Details - @(CurrentOrder is null ? "" : CurrentOrder.OrderID)</h1>
+<h1>Order Details</h1>
 
 @if (CurrentOrder is null)
 {
@@ -11,18 +11,25 @@
 }
 else
 {
-    <h2>Current Status: @GetStatusMessage(CurrentStatus)</h2>
     <ul>
-        @foreach (var orderItem in CurrentOrder.OrderItems.OrderBy(oi => oi.Product.Name))
-        {
-            <li>@orderItem.Product.Name - @orderItem.Quantity</li>
-        }
+        <li>Order ID: @CurrentOrder.OrderID</li>
+        <li>Current Status: @GetStatusMessage(CurrentStatus)</li>
+        <li>
+            Items:
+            <ul>
+                @foreach (var orderItem in CurrentOrder.OrderItems.OrderBy(oi => oi.Product.Name))
+                {
+                    <li>@orderItem.Product.Name - Quantity @orderItem.Quantity - <strong>@(orderItem.Product.Price * orderItem.Quantity) DuckBucks</strong></li>
+                }
+            </ul>
+        </li>
+        <li>Order Total: <strong>@CurrentOrder.OrderItems.Sum(oi => oi.Quantity * oi.Product.Price) DuckBucks</strong></li>
     </ul>
 }
 
 <NavLink class="nav-link" href="orders">
-    <button class="btn btn-primary">
-        Go Back
+    <button class="btn btn-secondary">
+        Back to Orders
     </button>
 </NavLink>
 
@@ -55,7 +62,7 @@ else
             CurrentStatus = OrderModel.GetStatus(CurrentOrder);
             StateHasChanged();
 
-            if (CurrentStatus == OrderStatus.DELIVERED)
+            if (CurrentStatus == OrderStatus.Delivered)
             {
                 cancellationToken.Cancel();
             }
@@ -69,14 +76,14 @@ else
     private string GetStatusMessage(OrderStatus status) =>
         status switch
         {
-            OrderStatus.ORDERPLACED => "The order has been placed and will actioned shortly.",
-            OrderStatus.PREPARINGFORDISPATCH => "Our warehouse workers are preparing the order for dispatch.",
-            OrderStatus.DISPATCHED => "The order has been dispatched to a distribution centre near you.",
-            OrderStatus.OUTFORDELIVERY => "A courier will be delivering your order today.",
-            OrderStatus.DELIVERED => "Your order has been delivered. Enjoy!",
+            OrderStatus.OrderPlaced => "The order has been placed and will actioned shortly.",
+            OrderStatus.PreparingForDispatch => "Our warehouse workers are preparing the order for dispatch.",
+            OrderStatus.Dispatched => "The order has been dispatched to a distribution centre near you.",
+            OrderStatus.OutForDelivery => "A courier will be delivering your order today.",
+            OrderStatus.Delivered => "Your order has been delivered. Enjoy!",
             _ => ""
         };
-    
+
 
     void IDisposable.Dispose()
     {

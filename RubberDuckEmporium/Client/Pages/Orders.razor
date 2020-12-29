@@ -1,6 +1,8 @@
 ﻿@page "/orders"
 @inject IOrderService OrderService 
+@inject NavigationManager NavigationManager 
 @attribute [Authorize]
+@implements IDisposable
 
 <h1>Orders</h1>
 
@@ -14,30 +16,72 @@ else if (CurrentOrders.Count == 0)
 }
 else
 {
-    <ul>
-    @foreach(var order in CurrentOrders)
+    <table class="table table-bordered">
+        <tr>
+            <th>Order ID</th>
+            <th>Number of Items</th>
+            <th>Created Date</th>
+            <th>Order Status</th>
+            <th></th>
+        </tr>
+    @foreach(var order in CurrentOrders.OrderByDescending(o => o.CreatedDate))
     {
         var orderID = order.OrderID;
-        <li>
-            Order ID: @orderID <NavLink class="nav-link" href="@($"/orders/{orderID}")"><button class="btn btn-secondary">View Details</button></NavLink>
-            <ul>
-                @foreach(var orderItem in order.OrderItems.OrderBy(oi => oi.Product.Name))
-                {
-                    <li>@orderItem.Product.Name - @orderItem.Quantity</li>
-                }
-            </ul>
-        </li>
-        
+        <tr>
+            <td>@orderID</td>
+            <td>@order.OrderItems.Count</td>
+            <td>@order.CreatedDate.ToString("dd/MM/yyyy hh:mm:ss tt")</td>
+            <td>@OrderModel.GetStatus(order).Humanize().Transform(To.TitleCase)</td>
+            <td>
+                <button class="btn btn-secondary btn-sm details-button" @onclick="() => ViewOrder(orderID)">View Details</button>
+            </td>
+        </tr>
     }
-    </ul>
+    </table>
 }
 
 @code {        
 
     public List<OrderModel> CurrentOrders { get; set; }
 
-    protected async override Task OnInitializedAsync()
+    CancellationTokenSource cancellationToken;
+
+    protected async override Task OnParametersSetAsync()
     {
         CurrentOrders = await OrderService.RetrieveAllForUser();
+
+        cancellationToken?.Cancel();
+
+        PollStatus();
+    }
+
+    private async void PollStatus()
+    {
+        cancellationToken = new CancellationTokenSource();
+
+        while (!cancellationToken.IsCancellationRequested)
+        {
+            // Bit of a hack but never mind. Re-rendering the component will recalculate the status.
+            StateHasChanged();
+
+            if (CurrentOrders.Any(o => OrderModel.GetStatus(o) != OrderStatus.Delivered))
+            {
+                await Task.Delay(5000);
+            }
+            else
+            {
+                cancellationToken.Cancel();
+            }
+        }
+    }
+
+    void ViewOrder(Guid orderID)
+    {
+        NavigationManager.NavigateTo($"/orders/{orderID}");
+    }
+
+    void IDisposable.Dispose()
+    {
+        cancellationToken?.Cancel();
     }
 } 

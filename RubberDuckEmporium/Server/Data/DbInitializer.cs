@@ -18,9 +18,8 @@ namespace RubberDuckEmporium.Server.Data
             {
                 return;
             }
-
-            Guid adminGuid = Guid.NewGuid();
-            Guid defaultGuid = Guid.NewGuid();
+            Guid adminGuid = new("cbe4d72d-f3f4-426c-8b59-283bb4d3f2a8");
+            Guid defaultGuid = new("2becafb8-9989-4643-b7be-bc6876269444");
 
             var adminUser = new IdentityUser<Guid> { Id = adminGuid, UserName = "Admin" };
             var defaultUser = new IdentityUser<Guid> { Id = defaultGuid, UserName = "Default" };
