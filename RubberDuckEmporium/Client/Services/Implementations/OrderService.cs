@@ -39,7 +39,7 @@ namespace RubberDuckEmporium.Client.Services.Implementations
             return res;
         }
 
-        public async Task<OrderModel> Retrieve(int orderID)
+        public async Task<OrderModel> Retrieve(Guid orderID)
         {
             var res = await _httpClient.GetFromJsonAsync<OrderModel>($"/api/orders/{orderID}");
 

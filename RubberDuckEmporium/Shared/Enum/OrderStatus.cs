@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RubberDuckEmporium.Shared
+namespace RubberDuckEmporium.Shared.Enum
 {
     public enum OrderStatus
     {
         ORDERPLACED,
+        PREPARINGFORDISPATCH,
         DISPATCHED,
+        OUTFORDELIVERY,
         DELIVERED
     }
 }

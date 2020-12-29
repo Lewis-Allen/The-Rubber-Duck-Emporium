@@ -17,8 +17,9 @@ else
     <ul>
     @foreach(var order in CurrentOrders)
     {
+        var orderID = order.OrderID;
         <li>
-            Order ID: @order.OrderID
+            Order ID: @orderID <NavLink class="nav-link" href="@($"/orders/{orderID}")"><button class="btn btn-secondary">View Details</button></NavLink>
             <ul>
                 @foreach(var orderItem in order.OrderItems.OrderBy(oi => oi.Product.Name))
                 {

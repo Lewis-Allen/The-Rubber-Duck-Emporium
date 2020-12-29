@@ -1,5 +1,7 @@
-﻿@page "/orders/{OrderID:int}"
-@inject IOrderService OrderService;
+﻿@page "/orders/{OrderID:guid}"
+@inject IOrderService OrderService
+@implements IDisposable
+@attribute [Authorize]
 
 <h1>Order Details - @(CurrentOrder is null ? "" : CurrentOrder.OrderID)</h1>
 
@@ -9,6 +11,7 @@
 }
 else
 {
+    <h2>Current Status: @GetStatusMessage(CurrentStatus)</h2>
     <ul>
         @foreach (var orderItem in CurrentOrder.OrderItems.OrderBy(oi => oi.Product.Name))
         {
@@ -24,13 +27,59 @@ else
 </NavLink>
 
 @code {
+
     [Parameter]
-    public int OrderID { get; set; }
+    public Guid OrderID { get; set; }
 
     public OrderModel CurrentOrder { get; set; }
+
+    public OrderStatus CurrentStatus { get; set; }
+
+    CancellationTokenSource cancellationToken;
 
     protected async override Task OnParametersSetAsync()
     {
         CurrentOrder = await OrderService.Retrieve(OrderID);
+
+        cancellationToken?.Cancel();
+
+        PollStatus();
+    }
+
+    private async void PollStatus()
+    {
+        cancellationToken = new CancellationTokenSource();
+
+        while(!cancellationToken.IsCancellationRequested)
+        {
+            CurrentStatus = OrderModel.GetStatus(CurrentOrder);
+            StateHasChanged();
+
+            if (CurrentStatus == OrderStatus.DELIVERED)
+            {
+                cancellationToken.Cancel();
+            }
+            else
+            {
+                await Task.Delay(5000);
+            }
+        }
+    }
+
+    private string GetStatusMessage(OrderStatus status) =>
+        status switch
+        {
+            OrderStatus.ORDERPLACED => "The order has been placed and will actioned shortly.",
+            OrderStatus.PREPARINGFORDISPATCH => "Our warehouse workers are preparing the order for dispatch.",
+            OrderStatus.DISPATCHED => "The order has been dispatched to a distribution centre near you.",
+            OrderStatus.OUTFORDELIVERY => "A courier will be delivering your order today.",
+            OrderStatus.DELIVERED => "Your order has been delivered. Enjoy!",
+            _ => ""
+        };
+    
+
+    void IDisposable.Dispose()
+    {
+        cancellationToken?.Cancel();
     }
 }

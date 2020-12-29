@@ -33,7 +33,7 @@ namespace RubberDuckEmporium.Server.Controllers
             var currentUser = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
 
             OrderModel order = new();
-            order.Status = OrderStatus.ORDERPLACED;
+            order.CreatedDate = DateTime.Now;
             order.OrderItems = basket.BasketItems.Select(bi => new OrderItemModel(_context.Products.Find(bi.Product.ProductID), bi.Quantity)).ToList();
             order.UserID = currentUser.Id;
 
@@ -52,8 +52,8 @@ namespace RubberDuckEmporium.Server.Controllers
         }
 
         [HttpGet]
-        [Route("{orderID:int}")]
-        public async Task<OrderModel> Retrieve(int orderID)
+        [Route("{orderID:guid}")]
+        public async Task<OrderModel> Retrieve(Guid orderID)
         {
             var currentUser = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
 

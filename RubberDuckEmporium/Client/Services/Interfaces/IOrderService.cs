@@ -12,6 +12,6 @@ namespace RubberDuckEmporium.Client.Services.Interfaces
         public Task<List<OrderModel>> RetrieveAllForUser();
         public Task<List<OrderModel>> RetrieveAll();
         public Task<OrderModel> PlaceOrder(BasketModel basket);
-        public Task<OrderModel> Retrieve(int orderID);
+        public Task<OrderModel> Retrieve(Guid orderID);
     }
 }
