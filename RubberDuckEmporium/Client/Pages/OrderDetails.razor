@@ -19,7 +19,7 @@ else
             <ul>
                 @foreach (var orderItem in CurrentOrder.OrderItems.OrderBy(oi => oi.Product.Name))
                 {
-                    <li>@orderItem.Product.Name - Quantity @orderItem.Quantity - <strong>@(orderItem.Product.Price * orderItem.Quantity) DuckBucks</strong></li>
+                    <li>@orderItem.Product.Name - @orderItem.Quantity - <strong>@(orderItem.Product.Price * orderItem.Quantity) DuckBucks</strong></li>
                 }
             </ul>
         </li>

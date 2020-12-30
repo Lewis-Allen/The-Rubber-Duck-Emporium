@@ -21,7 +21,7 @@ else
         {
             var item = basketItem;
             <li>
-                @item.Product.Name - @item.Quantity
+                @item.Product.Name - @item.Quantity - @(item.Quantity * item.Product.Price) DuckBucks
                 <button class="btn btn-sm btn-outline-warning" @onclick="() => UpdateItem(item.Product, item.Quantity - 1)">
                     <span class="oi oi-arrow-thick-bottom" title="Remove one" aria-hidden="true"></span>
                 </button>
@@ -36,7 +36,7 @@ else
     </ul>
     <div class="d-flex">
         <button class="btn btn-danger" @onclick="ClearBasket">Clear Basket</button>
-        <button class="btn btn-success" @onclick="PlaceOrder">Place Order</button>
+        <button class="btn btn-success" @onclick="PlaceOrder">Place Order - @CurrentBasket.BasketItems.Sum(bi => bi.Quantity * bi.Product.Price) DuckBucks</button>
     </div>
 }
 
