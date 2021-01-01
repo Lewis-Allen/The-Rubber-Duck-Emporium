@@ -6,7 +6,7 @@
 
 @if (products == null)
 {
-    <p>Loading Products...</p>
+    <Loading />
 }
 else
 {
@@ -45,7 +45,9 @@ else
     {
         buttons[buttonNumber] = true;
         BasketItemModel basketItem = new(product, 1);
+
         await basketService.AddToBasket(basketItem);
+
         buttons[buttonNumber] = false;
         StateHasChanged();
     }
