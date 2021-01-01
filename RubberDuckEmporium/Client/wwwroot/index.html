@@ -13,10 +13,16 @@
 </head>
 
 <body>
-    <div id="app">Loading...</div>
+    <div id="app">
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border text-warning centered" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
 
     <div id="blazor-error-ui">
-        An unhandled error has occurred.
+        An unhandled error has occurred. If you are logged in, please try logging out then in again.
         <a href="" class="reload">Reload</a>
         <a class="dismiss">X</a>
     </div>

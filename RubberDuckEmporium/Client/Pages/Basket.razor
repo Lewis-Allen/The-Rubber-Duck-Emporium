@@ -16,29 +16,50 @@ else if (CurrentBasket.BasketItems.Count == 0)
 }
 else
 {
-    <ul>
+    <table class="table table-bordered">
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price (DuckBucks)</th>
+            <th></th>
+            <th></th>
+        </tr>
         @foreach (var basketItem in CurrentBasket.BasketItems.OrderBy(bi => bi.Product.Name))
         {
             var item = basketItem;
-            <li>
-                @item.Product.Name - @item.Quantity - @(item.Quantity * item.Product.Price) DuckBucks
-                <button class="btn btn-sm btn-outline-warning" @onclick="() => UpdateItem(item.Product, item.Quantity - 1)">
-                    <span class="oi oi-arrow-thick-bottom" title="Remove one" aria-hidden="true"></span>
-                </button>
-                <button class="btn btn-sm btn-outline-success" @onclick="() => UpdateItem(item.Product, item.Quantity + 1)">
-                    <span class="oi oi-arrow-thick-top" title="Add one" aria-hidden="true"></span>
-                </button>
-                <button class="btn btn-sm btn-danger" @onclick="() => UpdateItem(item.Product, 0)">
-                    <span class="oi oi-x" title="Remove from basket" aria-hidden="true"></span>
-                </button>
-            </li>
+            <tr>
+                <td>@item.Product.Name</td>
+                <td>@item.Quantity</td>
+                <td>@(item.Quantity * item.Product.Price)</td>
+                <td class="min">
+                    <button class="btn btn-sm btn-outline-warning" @onclick="() => UpdateItem(item.Product, item.Quantity - 1)">
+                        <span class="oi oi-arrow-thick-bottom" title="Remove one" aria-hidden="true"></span>
+                    </button>
+                    <button class="btn btn-sm btn-outline-success" @onclick="() => UpdateItem(item.Product, item.Quantity + 1)">
+                        <span class="oi oi-arrow-thick-top" title="Add one" aria-hidden="true"></span>
+                    </button>
+                </td>
+                <td class="min">
+                    <button class="btn btn-sm btn-danger" @onclick="() => UpdateItem(item.Product, 0)">
+                        <span class="oi oi-x" title="Remove from basket" aria-hidden="true"></span>
+                    </button>
+                </td>
+            </tr>
         }
-    </ul>
+        <tr>
+            <td><h3>Total DuckBucks</h3></td>
+            <td></td>
+            <td><h3>@CurrentBasket.BasketItems.Sum(bi => bi.Quantity * bi.Product.Price)</h3></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+
     <div class="d-flex">
         <button class="btn btn-danger" @onclick="ClearBasket">Clear Basket</button>
         <button class="btn btn-success" @onclick="PlaceOrder">Place Order - @CurrentBasket.BasketItems.Sum(bi => bi.Quantity * bi.Product.Price) DuckBucks</button>
     </div>
-}
+    }
 
 @code {
 
@@ -67,4 +88,4 @@ else
 
         NavigationManager.NavigateTo($"/orders/{placedOrder.OrderID}");
     }
-} 
+}

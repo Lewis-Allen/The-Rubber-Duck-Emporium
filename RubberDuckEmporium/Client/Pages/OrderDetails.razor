@@ -11,20 +11,21 @@
 }
 else
 {
-    <ul>
-        <li>Order ID: @CurrentOrder.OrderID</li>
-        <li>Current Status: @GetStatusMessage(CurrentStatus)</li>
-        <li>
-            Items:
-            <ul>
-                @foreach (var orderItem in CurrentOrder.OrderItems.OrderBy(oi => oi.Product.Name))
-                {
-                    <li>@orderItem.Product.Name - @orderItem.Quantity - <strong>@(orderItem.Product.Price * orderItem.Quantity) DuckBucks</strong></li>
-                }
-            </ul>
-        </li>
-        <li>Order Total: <strong>@CurrentOrder.OrderItems.Sum(oi => oi.Quantity * oi.Product.Price) DuckBucks</strong></li>
-    </ul>
+    <div class="progress">
+        <div class="progress-bar @(CurrentStatus != OrderStatus.Delivered ? "progress-bar-striped progress-bar-animated bg-info" : "bg-success")" role="progressbar" aria-valuenow="@(GetProgress(CurrentStatus))" aria-valuemin="0" aria-valuemax="100" style="transition-duration: 1000ms; width: @(GetProgress(CurrentStatus))%;"></div>
+    </div>
+    <h2>Current Status: @CurrentStatus.Humanize()</h2>
+    <p>@GetStatusMessage(CurrentStatus)</p>
+    <div>
+        Items:
+        <ul>
+            @foreach (var orderItem in CurrentOrder.OrderItems.OrderBy(oi => oi.Product.Name))
+            {
+                <li>@orderItem.Product.Name - @orderItem.Quantity - <strong>@(orderItem.Product.Price * orderItem.Quantity) DuckBucks</strong></li>
+            }
+        </ul>
+    </div>
+    <p>Order Total: <strong>@CurrentOrder.OrderItems.Sum(oi => oi.Quantity * oi.Product.Price) DuckBucks</strong></p>
 }
 
 <NavLink class="nav-link" href="orders">
@@ -57,7 +58,7 @@ else
     {
         cancellationToken = new CancellationTokenSource();
 
-        while(!cancellationToken.IsCancellationRequested)
+        while (!cancellationToken.IsCancellationRequested)
         {
             CurrentStatus = OrderModel.GetStatus(CurrentOrder);
             StateHasChanged();
@@ -76,14 +77,24 @@ else
     private string GetStatusMessage(OrderStatus status) =>
         status switch
         {
-            OrderStatus.OrderPlaced => "The order has been placed and will actioned shortly.",
-            OrderStatus.PreparingForDispatch => "Our warehouse workers are preparing the order for dispatch.",
-            OrderStatus.Dispatched => "The order has been dispatched to a distribution centre near you.",
+            OrderStatus.OrderPlaced => "Your order has been placed and will actioned shortly.",
+            OrderStatus.PreparingForDispatch => "Our warehouse workers are preparing your order for dispatch.",
+            OrderStatus.Dispatched => "Your order has been dispatched to a distribution centre near you.",
             OrderStatus.OutForDelivery => "A courier will be delivering your order today.",
             OrderStatus.Delivered => "Your order has been delivered. Enjoy!",
             _ => ""
         };
 
+    private int GetProgress(OrderStatus status) =>
+        status switch
+        {
+            OrderStatus.OrderPlaced => 5,
+            OrderStatus.PreparingForDispatch => 35,
+            OrderStatus.Dispatched => 65,
+            OrderStatus.OutForDelivery => 90,
+            OrderStatus.Delivered => 100,
+            _ => 0
+        };
 
     void IDisposable.Dispose()
     {

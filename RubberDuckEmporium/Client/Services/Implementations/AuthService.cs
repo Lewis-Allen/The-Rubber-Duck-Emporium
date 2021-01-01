@@ -18,17 +18,14 @@ namespace RubberDuckEmporium.Client.Services.Implementations
         private readonly HttpClient _httpClient;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
         private readonly ILocalStorageService _localStorage;
-        private readonly IBasketService _basketService;
 
         public AuthService(HttpClient httpClient,
                            AuthenticationStateProvider authenticationStateProvider,
-                           ILocalStorageService localStorage,
-                           IBasketService basketService)
+                           ILocalStorageService localStorage)
         {
             _httpClient = httpClient;
             _authenticationStateProvider = authenticationStateProvider;
             _localStorage = localStorage;
-            _basketService = basketService;
         }
 
         public async Task<RegisterResult> Register(RegisterModel registerModel)

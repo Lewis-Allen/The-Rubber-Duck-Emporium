@@ -1,6 +1,8 @@
 ﻿@page "/"
 @inject IProductService productService;
 @inject IBasketService basketService;
+@inject AuthenticationStateProvider authenticationStateProvider;
+@inject NavigationManager navigationManager; 
 
 <h1>Products</h1>
 
@@ -34,6 +36,7 @@ else
 
     ProductModel[] products;
     bool[] buttons;
+
     protected async override Task OnInitializedAsync()
     {
         var productList = await productService.GetAllProducts();
@@ -43,12 +46,24 @@ else
 
     async void AddToBasket(ProductModel product, int buttonNumber)
     {
-        buttons[buttonNumber] = true;
-        BasketItemModel basketItem = new(product, 1);
+        var authState = await authenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
 
-        await basketService.AddToBasket(basketItem);
+        if (user is not null && user.Identity.IsAuthenticated)
+        {
+            buttons[buttonNumber] = true;
+            StateHasChanged();
 
-        buttons[buttonNumber] = false;
-        StateHasChanged();
+            BasketItemModel basketItem = new(product, 1);
+
+            await basketService.AddToBasket(basketItem);
+
+            buttons[buttonNumber] = false;
+            StateHasChanged();
+        }
+        else
+        {
+            navigationManager.NavigateTo("/login");   
+        }
     }
 }
