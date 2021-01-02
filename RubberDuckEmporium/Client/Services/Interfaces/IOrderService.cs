@@ -10,7 +10,6 @@ namespace RubberDuckEmporium.Client.Services.Interfaces
     public interface IOrderService
     {
         public Task<List<OrderModel>> RetrieveAllForUser();
-        public Task<List<OrderModel>> RetrieveAll();
         public Task<OrderModel> PlaceOrder(BasketModel basket);
         public Task<OrderModel> Retrieve(Guid orderID);
     }

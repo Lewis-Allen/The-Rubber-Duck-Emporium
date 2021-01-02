@@ -27,11 +27,6 @@ namespace RubberDuckEmporium.Client.Services.Implementations
             return order;
         }
 
-        public async Task<List<OrderModel>> RetrieveAll()
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<List<OrderModel>> RetrieveAllForUser()
         {
             var res = await _httpClient.GetFromJsonAsync<List<OrderModel>>("/api/orders");
