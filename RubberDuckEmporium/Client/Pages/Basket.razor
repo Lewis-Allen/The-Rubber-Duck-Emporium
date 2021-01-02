@@ -46,10 +46,10 @@ else
                 </td>
             </tr>
         }
-        <tr>
-            <td><h3>Total DuckBucks</h3></td>
+        <tr class="table-success">
+            <td>Total</td>
             <td></td>
-            <td><h3>@CurrentBasket.BasketItems.Sum(bi => bi.Quantity * bi.Product.Price)</h3></td>
+            <td>@CurrentBasket.BasketItems.Sum(bi => bi.Quantity * bi.Product.Price) DuckBucks</td>
             <td></td>
             <td></td>
         </tr>

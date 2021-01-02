@@ -12,7 +12,7 @@
 else
 {
     <div class="progress">
-        <div class="progress-bar @(CurrentStatus != OrderStatus.Delivered ? "progress-bar-striped progress-bar-animated bg-info" : "bg-success")" role="progressbar" aria-valuenow="@(GetProgress(CurrentStatus))" aria-valuemin="0" aria-valuemax="100" style="transition-duration: 1000ms; width: @(GetProgress(CurrentStatus))%;"></div>
+        <div class="progress-bar @(CurrentStatus != OrderStatus.Delivered ? "progress-bar-striped progress-bar-animated bg-info" : "bg-success")" role="progressbar" aria-valuenow="@(GetProgress(CurrentStatus))" aria-valuemin="0" aria-valuemax="100" style="transition-duration: 3000ms; width: @(GetProgress(CurrentStatus))%;"></div>
     </div>
     <h2>Current Status: @CurrentStatus.Humanize()</h2>
     <p>@GetStatusMessage(CurrentStatus)</p>

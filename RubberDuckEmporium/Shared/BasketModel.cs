@@ -8,7 +8,7 @@ namespace RubberDuckEmporium.Shared
 {
     public class BasketModel
     {
-        public int BasketID { get; set; }
+        public Guid BasketID { get; set; }
         public Guid UserID { get; set; }
         public List<BasketItemModel> BasketItems { get; set; }
     }

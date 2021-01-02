@@ -1,8 +1,9 @@
 ﻿@page "/"
-@inject IProductService productService;
-@inject IBasketService basketService;
-@inject AuthenticationStateProvider authenticationStateProvider;
-@inject NavigationManager navigationManager; 
+@inject IProductService productService
+@inject IBasketService basketService
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject NavigationManager navigationManager
+@inject IToastService toastSerivce
 
 <h1>Products</h1>
 
@@ -56,14 +57,19 @@ else
 
             BasketItemModel basketItem = new(product, 1);
 
-            await basketService.AddToBasket(basketItem);
+            var res = await basketService.AddToBasket(basketItem);
 
             buttons[buttonNumber] = false;
+
+            if(res is not null)
+            {
+                toastSerivce.ShowSuccess($"Added '{product.Name}' to Basket.");
+            }
             StateHasChanged();
         }
         else
         {
-            navigationManager.NavigateTo("/login");   
+            navigationManager.NavigateTo("/login");
         }
     }
 }

@@ -16,7 +16,7 @@ namespace RubberDuckEmporium.Shared
             Quantity = quantity;
         }
 
-        public int BasketItemID { get; set; }
+        public Guid BasketItemID { get; set; }
         public ProductModel Product { get; set; }
         public int Quantity { get; set; }
     }
