@@ -18,11 +18,11 @@ else
             ProductModel productLink = products[i];
             var buttonNumber = i;
             <div class="card" style="width: 15rem; margin: 5px;">
-                <img class="card-img-top" src="https://picsum.photos/250" alt="@productLink.Name" style="border-radius: 0;">
+                <img class="card-img-top" src="@productLink.ImageURL" alt="@productLink.Name" style="border-radius: 0;">
                 <div class="card-body">
                     <h5 class="card-title">@productLink.Name</h5>
                     <p class="card-subtitle mb-2 text-muted">@productLink.Price DuckBucks</p>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <p class="card-text">@productLink.Description</p>
                     <button class="btn btn-primary" @onclick="async () => AddToBasket(productLink, buttonNumber)" disabled="@buttons[buttonNumber]">
                         <span class="spinner-border spinner-border-sm" role="status" hidden="@(!buttons[buttonNumber])" aria-hidden="true"></span>
                         @(buttons[buttonNumber] ? "Adding..." : "Add to Basket")</button>

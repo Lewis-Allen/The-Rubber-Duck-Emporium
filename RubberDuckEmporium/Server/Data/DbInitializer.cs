@@ -24,15 +24,15 @@ namespace RubberDuckEmporium.Server.Data
             var adminUser = new IdentityUser<Guid> { Id = adminGuid, UserName = "Admin" };
             var defaultUser = new IdentityUser<Guid> { Id = defaultGuid, UserName = "Default" };
 
-            context.Products.Add(new ProductModel { ProductID = 1, Name = "Batman Rubber Duck", Price = 600 }); 
-            context.Products.Add(new ProductModel { ProductID = 2, Name = "Superman Rubber Duck", Price = 600 }); 
-            context.Products.Add(new ProductModel { ProductID = 3, Name = "Spiderman Rubber Duck", Price = 600 });
-            context.Products.Add(new ProductModel { ProductID = 4, Name = "Captain Marvel Rubber Duck", Price = 600 });
-            context.Products.Add(new ProductModel { ProductID = 5, Name = "Thanos Rubber Duck", Price = 600 });
-            context.Products.Add(new ProductModel { ProductID = 6, Name = "Captain America Rubber Duck", Price = 600 });
-            context.Products.Add(new ProductModel { ProductID = 7, Name = "Hulk Rubber Duck", Price = 600 });
-            context.Products.Add(new ProductModel { ProductID = 8, Name = "Avengers Rubber Duck Set", Price = 2000 });
-            context.Products.Add(new ProductModel { ProductID = 9, Name = "Justice League Rubber Duck Set", Price = 2000 });
+            context.Products.Add(new ProductModel { ProductID = 1, Name = "A Veritable Assortment", Description = "They are all very different but their bond is strong.", Price = 4000, ImageURL = "images/1nGxy0Mh8eA-unsplash.jpg" }); 
+            context.Products.Add(new ProductModel { ProductID = 2, Name = "Duck Apocalypse", Description = "They were billions.", Price = 5000, ImageURL = "images/59yg_LpcvzQ-unsplash.jpg" }); 
+            context.Products.Add(new ProductModel { ProductID = 3, Name = "Waterpark Wanderers", Description = "They have escaped the bath.", Price = 3000, ImageURL = "images/pexels-106144.jpg" });
+            //context.Products.Add(new ProductModel { ProductID = 4, Name = "Captain Marvel Rubber Duck", Price = 600, ImageURL = "images/ducky-1.jpg" });
+            context.Products.Add(new ProductModel { ProductID = 5, Name = "The Duckvengers", Description = "The bath's greatest heroes.", Price = 3000, ImageURL = "images/pexels-122308.jpg" });
+            context.Products.Add(new ProductModel { ProductID = 6, Name = "Bob and his Sickly Brother", Description = "Bob's bro had some dodgy sushi for dinner.", Price = 1200, ImageURL = "images/pexels-132464.jpg" });
+            context.Products.Add(new ProductModel { ProductID = 7, Name = "Gargantuan Titan Duck", Description = "A ducky belonging to Poseidon himself.", Price = 50000, ImageURL = "images/pexels-2133193.jpg" });
+            //context.Products.Add(new ProductModel { ProductID = 8, Name = "Avengers Rubber Duck Set", Price = 2000, ImageURL = "images/pexels-2764989.jpg" });
+            context.Products.Add(new ProductModel { ProductID = 9, Name = "Standard Purple Ducky", Description = "Standard Size Purple Rubber Duck.", Price = 600, ImageURL = "images/pexels-592677.jpg" });
 
             context.SaveChanges();
 
